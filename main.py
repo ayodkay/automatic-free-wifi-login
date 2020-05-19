@@ -1,5 +1,6 @@
 from selenium import webdriver
 import time
+import subprocess
 
 
 class FreeWifi:
@@ -11,9 +12,14 @@ class FreeWifi:
 
     def login_user(self):
         self.set_up()
-        self.browser.find_element_by_id('formVideo').submit()
-        time.sleep(120)
-        self.browser.close()
+        try:
+            self.browser.find_element_by_id('formVideo').submit()
+            time.sleep(60)
+            self.browser.close()
+        except:
+            if "#NET-CLARO-WIFI" not in subprocess.check_output("netsh wlan show interface").decode():
+                print("please connect to #NET_CLARO_WIFI")
+            self.browser.close()
 
 
 if __name__ == '__main__':
@@ -22,4 +28,4 @@ if __name__ == '__main__':
 
         free.login_user()
 
-        time.sleep(960)
+        time.sleep(1800)
