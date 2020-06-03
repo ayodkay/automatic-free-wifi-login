@@ -1,6 +1,8 @@
 from selenium import webdriver
 import time
 import subprocess
+import urllib3
+import json
 
 
 class FreeWifi:
@@ -24,8 +26,13 @@ class FreeWifi:
 
 if __name__ == '__main__':
     while True:
-        free = FreeWifi()
+        try:
+            http = urllib3.PoolManager()
+            request = http.request('GET', 'google.com')
 
-        free.login_user()
-
-        time.sleep(1800)
+            if json.loads(request.data.decode()).get("status") == 400:
+                FreeWifi().login_user()
+            else:
+                continue
+        except:
+            pass
